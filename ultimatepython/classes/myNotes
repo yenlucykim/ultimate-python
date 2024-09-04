@@ -1,0 +1,212 @@
+#Definition
+"""
+*FEATURES
+class=one logical entity made up of methods and state
+
+ike everything else in Python, classes are also objects
+--> this means that classes are:
+1. subclasses of object
+2. instances of object
+    assert issubclass(Car, object) and isinstance(Car, object)
+--> which means we can modify the class at runtime
+
+illustration of a class being an object:
+    driving = getattr(car, "drive")
+    assert driving.__self__ == car
+    assert ismethod(driving) and not isfunction(driving)
+
+explanation:
+functions vs methods
+    functions: block of reusable code that can be called to perform a task
+                NOT bound to an instance of a class
+    methods: function bound to an instance of a class
+                -bound meaning implicit __self__ binding to the instance of
+                class
+                -since it's bound to the instance, it can access the
+                instance's attributes
+instance method vs variable method
+    instance method: method tied to a specific instance of a class
+    variable method: variable holding a reference to a method and remains
+                    bound to the instance
+
+*CREATION
+definition:
+    class className:
+        -constructor
+            def __init__(self, args)
+        -string representations
+            def __repr__(self): formal representation for developers
+            def __str__(self): informal representation for users
+        -methods
+            def methodName(self, args): regular instance methods
+
+creation:
+    variableName=className(constructor args)
+"""
+
+#Inheritance
+"""
+*FEATURES
+    inheritance = a fundamental concept in OOP that allows a new class (
+    subclass/child) to inherit properties (attributes) and behaviors(methods)
+    from an existing class (superclass/parent)
+
+*SYNTAX
+    class childClassName(parentClassName):
+        -constructor
+            def __init__(self, param of parent init, newAttribute):
+                super().__init__(args of parent init)
+                self.newAttribute=newAttributeValue #if initializing with a
+                default value, no need to pass in as param
+                self.newAttribute=newAttribute
+"""
+
+#Abstract Class
+"""
+abstract class = extension of a basic class that usually inherits the ABC
+class and has at least one 'abstractMethod'
+    -cannot be instantiated on its own
+    -its subclasses need to provide concrete implementations for the abstract methods
+
+*SYNTAX:
+    from abc import ABC, abstractmethod
+        -ABC=abstract base class
+        -inheriting the ABC class is conventional but not required
+
+    class abstractClassName(ABC):
+        -constructor
+        -str representation
+        -abstractMethod
+            @abstractMethod
+            def abstractMethodName(self):
+                raise NotImplementedError
+"""
+
+#Exception Class
+"""
+Hierarchy of exceptions:
+-a structure where exceptions are organized from general to specific.
+-custom exceptions are subclasses of the BaseException class
+-custom exceptions can be created to reflect the specific errors relevant to
+your application
+    -too much is not good (diminishing returns when too few developers can
+    handle too many exceptions)
+-useful for allowing downstream consumers (parts of a system or external
+tools that use your code) to handle different errors
+appropriately
+-if no downstream consumers, use the builtin exception classes with existing
+hierarchy https://docs.python.org/3/library/exceptions.html
+
+Calling exceptions:
+    try:
+        something
+    except ErrorClass as e:
+        handle error or assert error
+"""
+
+#Iterator Class
+"""
+design pattern vs composite pattern
+    design pattern: relatively simple, well-defined aspect of a computer
+                    program in terms of how to write a code
+    composite pattern: partitioning design pattern; a group of objects that
+                    are treated the same way as a single instance of the same type of object
+
+iterator class vs generator function:
+iterator class: iterates through a sequence of values one element at a time
+        -requires implementation of two magic methods:
+        __iter__: returns self
+        __next__: return the next element on the list, via iteration logic and
+                    handle errors
+        -more flexible for demanding requirements
+    class EmployeeIterator:
+    def __init__(self, employee):
+        self.employees_to_visit = [employee]
+        self.employees_visited = set()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if not self.employees_to_visit:
+            raise StopIteration
+        employee = self.employees_to_visit.pop()
+        if employee.name in self.employees_visited:
+            raise IterationError(_ITERATION_MESSAGE)
+        self.employees_visited.add(employee.name)
+        for report in employee.direct_reports:
+            self.employees_to_visit.append(report)
+        return employee
+
+generator function: simpler way to create an iterator
+        -uses the "yield" keyword to produce a sequence of values lazily one
+            at a time, saving the state of the generator
+        -simpler, code in a single place with less boilerplate code
+
+    def employee_generator(top_employee):
+    to_visit = [top_employee]
+    visited = set()
+    while len(to_visit) > 0:
+        employee = to_visit.pop()
+        if employee.name in visited:
+            raise IterationError(_ITERATION_MESSAGE)
+        visited.add(employee.name)
+        for report in employee.direct_reports:
+            to_visit.append(report)
+        yield employee
+
+class vs function:
+    Python supports both OOP and procedural programming
+    BIGGEST QUESTION: Is a class even appropriate for this given problem?
+
+    what is OOP for? where does it shine? -dispatching and messaging
+        dispatching: method call is resolved to the correct method
+        implementation based on the type of the object/class that is invoking it
+            -allows dynamic method resolution, polymorphism, and method
+            overriding
+        messaging: the process of objects communicating with each toehr by
+        invoking methods; facilitates interaction b/w objects and
+        encapsulates behavior
+            e.g. class Printer:
+                    def print_document(self, document):
+                        print(f"Printing document: {document}")
+
+                class Computer:
+                    def __init__(self, printer):
+                        self.printer = printer
+
+                    def send_document_to_print(self, document):
+                        self.printer.print_document(document)  # Messaging occurs here
+
+                printer = Printer()
+                computer = Computer(printer)
+                computer.send_document_to_print("My_Document.pdf")
+
+    QUESTION: is the ability to override methods always important?
+        ANSWER: no. don't use a class unless there's a need for users of your code to customize some functionality in the middle of a call chain
+        -instead, use namespacing (create a module that groups code that
+        operates on similar objects together)
+
+"""
+
+#Encapsulation
+"""
+encapsulation=a feature of OOP that hides implementation details of a class from its users
+    -limit the access of certain attributes/ methods within a class, so that users cannot directly access&modify from outside the class
+
+name mangling vs magic methods:
+    name mangling: prefix(__) before an attribute or method to make it private
+        - e.g. __my_method --> _MyClass__my_method (changed internally)
+        -should include __ every time you write it within the class
+    magic methods: prefix(__) AND postfix(__) that are part of a convention
+    to use Python's built-in mechanisms; doesn't make private
+        -e.g. __init__ and __str__
+
+
+unrelated tip:
+    except ValueError as e:
+        assert str(e) in {_INSUFFICIENT_BALANCE_MESSAGE, _INVALID_AMOUNT_MESSAGE}
+
+    **above, a set{} is used to check if str is either of the messages,
+    because it is more efficient than using a list[]
+"""
