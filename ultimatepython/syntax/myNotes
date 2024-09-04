@@ -1,0 +1,76 @@
+# notes for syntax
+# taking notes only of things that I was confused about or had forgotten
+
+# - `0x` for hexadecimal
+    # - `0o` for octal
+    # - `0b` for binary
+
+# There is also a special literal called None. This literal is used to
+    # point that a particular variable or object is not created
+    e = None
+    e_type = type(e)
+    assert e_type is type(None)
+    assert isinstance(e, object) and isinstance(e_type, object) # everything is an object in Python
+
+    #double slash for integer division
+    x=1
+    assert x //2 == 0
+
+
+    """
+    bitwise operators for manipulating individual bits of integers:
+    &, |, ^ (xor), ~ (not)
+    << left-shift, >> right-shift
+
+    1's vs 2's Complement:
+    1's complement: invert all bits
+    2's complement: add 1 to the 1's complement
+    * has advantage that +0 and -0 are represented in the same way (00000000)
+    """
+
+    # Conditional
+    # if and else can be used in one line,e.g. for assignment below
+    ran_5 = False
+    ran_5 = True if x_add_two == 3 else False
+
+    # chained comparisons are possible
+    ran_6 = False
+    if 0 < x_add_two < 2:
+        ran_6 = False   # skip: if
+    else:
+        ran_6 = True    # run
+
+    #Loop
+    total = 0
+    #**here, end point is not included, so if you want to go until index 0 included, write -1
+    for i in range(5): # single integer: start point is 0, end point is 5, increment is 1
+    for i in range(5, 0, -1): # start point is 5, end point is 0, increment is -1
+    for _ in range(5): # when you don't need to know the current loop iteration number, so loop var is not needed
+
+    # Functions
+    def functionName(arguments):
+
+    # differences b/w main and regular functions: regular accepts input param and returns value
+    # can pass functions in as param as well
+    # can concatenate strings with + sign
+
+    # lambda
+    '''
+    lambda functions are a way to create small, anonymous functions on the fly.
+    for short, simple operations to avoid the overhead of a fullfunction definition
+    syntax: lambda arguments:expression
+    *can have multiple args
+    * only single expression
+
+    often used as a simple function argument for high-order functions, such as map, filter, and reduce
+    '''
+
+
+    #docstrings
+    """
+    a string places immedicately on the first line within the body of a function, method, class,
+    or module declaration, for the purpose of documentation.
+    It is stored in the __doc__ attribute and can be accessed
+    It is an object, like everything else in Python (although comments and multi-line comments are not objects)
+    """
+    assert "includes this docstring!" in sum_until.__doc__
