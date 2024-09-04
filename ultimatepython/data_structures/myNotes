@@ -1,0 +1,273 @@
+#List
+"""
+*FEATURES
+* flexible types
+* dynamic size
+* negative indexing (from the back)
+* ordered
+* mutable
+* mutable thus not hashable (cannot be a key in dictionary)
+--use tuples instead for keys
+
+*UNIQUE METHODS
+*append() and pop()
+lengthy = []
+    for i in range(5):
+        lengthy.append(i)  # add 0..4 to the back
+    assert lengthy == [0, 1, 2, 3, 4]
+    lengthy.pop()  # pop out the 4 from the back
+
+*FUNCTIONS
+* slicing:     assert letters[0:3:2] == ["a", "c"]
+syntax: list[start:stop:step]
+
+* reverse() for reversing
+reverse using slicing: [::-1]
+
+* zip(): combines multiple iterables into a sequence of tuples
+where each tuple contains elements from the input iterables at the same position
+
+* enumerate(): adds an index (counter) to each item in an iterable,
+returning pairs of the form (index, item)
+useful for keeping a count of iterations
+ for index, (letter, number) in enumerate(zip(letters, numbers)):
+        assert letters[index] == letter
+        assert numbers[index] == number
+
+*sort(): sorting
+"""
+
+
+#Tuple
+"""
+*FEATURES
+* ordered
+* immutable (size and content cannot be changed)
+-bc of this immutable property, used when wanting to ensure that a specific structure
+remains constant throughout the code
+e.g. x and y coordinates should be a pair (tuple with two numbers) throughout
+
+* CREATION
+tuple=(1,2,3,4)
+
+
+*MANIPULATION
+-to add: bigger_immutable = immutable+(5,6)
+-to make smaller: smaller_immutable = immutable[1:3]   (slicing)
+* can be indexed and sliced like a list
+
+pos_x, pos_y = (0, 0)  # unpacking immediately, instead of storing tuple into a single variable
+    for i in range(1, 5, 2):
+        moved_count += 1
+        pos_x, pos_y = (pos_x + 10 * i, pos_y + 15 * i) # creating a new tuple with the updated variables, not mutating the original tuple
+"""
+
+#Set
+"""
+*FEATURES
+*unordered
+*unique values
+*mutable
+*no indexing
+
+* CREATION
+emptySet=set() --> have to use set() constructor for empty set
+simpleSet={1,2,3}
+
+*MANIPULATION
+insert: simpleSet.add()
+deleted: simpleSet.remove()
+
+return random element and deletes it from the set: simpleSet.pop()
+
+*OTHER FUNCTIONS
+intersection: .intersection or &
+    multiples_common = multiples_two.intersection(multiples_four)
+    multiples_common_shorthand = multiples_two & multiples_four
+
+union: .union or |
+
+exclusive, difference: .difference or - (elements not in intersection)
+
+subset and superset: .issubset and .issuperset
+*subset: every elem in subset is in the other set
+*superset: has all elem of the other set
+**every set is a subset and superset of itself
+
+"""
+
+#Dictionary
+"""
+*FEATURES
+mapping of keys to values
+entries sorted in the order that they were defined/ inserted
+
+*CREATION
+student_gpa = {"lucy":4.0,
+                "ryan":3.5}
+
+dict=defaultdict(default_value)
+* doesn't raise keyerror even when a missing key is accessed.
+instead, creates an entry for that key using the default value
+
+*UNIQUE METHODS
+.keys()
+.values()B
+.items(): access key and value simultaneously
+.get(key, default value): if checked key is missing, return default value
+dict[]: indexing possible, for modifying values
+e.g. dict[key]=newValue
+not dictName: checks whether dict is empty
+.clear(): deletes all content
+.update(key=value, key=value): can update values for multiple keys at the same time
+.pop(): remove
+
+
+*FUNCTIONS
+len(): returns length
+
+"""
+
+#One-liner comprehensions using 4 DS above:comprehension.py
+
+
+#String
+"""
+*FEATURES
+unordered
+immutable at runtime
+
+
+*CREATION
+
+*UNIQUE METHODS
+f"{...}{...}" : f-string (formatted string literal) that allows embedding of expressions inside string literals
+
+.split(): breaks a string into a list of substrings
+    e.g. .split(_DELIMITER): breaks into substrings where the delimiter occurs
+delimiter/separateor.join():joins(concatenates) the elements of an iterable (list of tuple)
+    into a single string, with the specificed separator between each element
+    e.g. ", ".join(split_content)
+.isupper()/.islower(): checks if all characters are uppercase/lowercase letters
+.startsWith(str)/.endsWith(str): checks if a string starts/ends with the given str
+    **(cannot be used directly for lists)
+    rather, iterate through and check each string
+    e.g. print(any(s.startswith("H") for s in string_list))  # Output: True
+
+upper(s)/lower(s): make into uppercase or lowercase letter
+.isalnum(): check if alphanumeric value
+ord(character)or ord('A'): check ASCII value
+
+
+
+*FUNCTIONS
+len(str)
+slicing
+unpacking: unpacking elements of the list into separate variables
+    e.g.     upper_content, lower_content = split_content
+
+
+"""
+
+#Deque
+"""
+*FEATURES
+sequential DS, but some implementation differences
+can be used as a LIFO stack
+    stack: push() to the top, pop() from the top
+            can be thought of as a singly linked list with a pointer to the top element
+
+can also be used as a FIFO queue
+    queue: enqueue() to the back (same as push), dequeue() from the front (same as pop)
+
+inserting and deleting works like a doubly linked list
+-node has left pointer and right pointer
+-takes constant time to create or remove a node
+
+*CREATION
+=deque()
+
+*UNIQUE METHODS
+**acting like a doubly linked list
+.append():adds new node to the right
+.appendleft(): adds new node to the left
+.pop(): pops from right (LIFO stack)
+.popleft(): pops from left (FIFO queue)
+
+can be iterated over to build any DS
+[elem for elem in dq]: list
+tuple(elem for elem in dq): tuple
+
+
+
+*FUNCTIONS
+
+
+"""
+
+#Namedtuple
+"""
+*FEATURES
+DS with named fields (similar to a class but lightweight and immutable)
+major difference from tuples: allows youto access tuple elements using names instead of indices
+
+*CREATION
+from collections import namedtuple
+    Point = namedtuple("Point", ["x", "y"])
+        point: typename, x&y: field names
+    make an instance:
+        point1 = Point(x=1, y=2)
+        point3 = Point(10, 20) ==> also work without explicit parameters (x=, y=)
+
+*UNIQUE METHODS
+can access fields using dot notation
+    e.g. point1.x
+can only accesss but immutable
+support tuple operations
+
+._asdict(): returns the named tuple as an ordereddict (a regular dictionary)
+point2 = Point(**point_dict): convert back to named tuple by unpacking
+
+._fields: lists the fields in the named tuple
+
+newPoint=oldPoint._replace(param=newvalue) : create a new point from an existing one
+
+id(point): checks the unique id/ memory address of the object
+
+"""
+
+#stack
+"""
+*CREATION
+stack=[]
+
+*UNIQUE METHODS
+stack.append(): add to stack
+stack.pop(): pop from top of stack
+stack[-1]: the value on top of stack
+"""
+#defaultdict
+"""
+*FEATURES
+dictionary that sets up a default value (default_factory) in its creation
+--can be a common type or a function
+
+
+
+*CREATION
+from collections import defaultdict
+    student_gpa = defaultdict(float, [("john", 3.5), ("bob", 2.8), ("mary", 3.2)])
+    -when trying to get the value of a key not present in the dict, it returns a default value for default_factory
+    in this case, float is set to default value 0.0
+
+*UNIQUE METHODS
+    we can change the default value of default_factory like this:
+    def set_default_to_gpa_max():
+        return _GPA_MAX
+
+    student_gpa.default_factory = set_default_to_gpa_max
+
+"""
+
+
+#Time Complexities https://wiki.python.org/moin/TimeComplexity
